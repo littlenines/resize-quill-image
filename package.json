@@ -28,7 +28,15 @@
     "quill image resize",
     "resize quill image"
   ],
-  "author": "Nemanja Galbinovic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/littlenines/resize-quill-image.git"
+  },
+  "homepage": "https://github.com/littlenines/resize-quill-image#readme",
+  "bugs": {
+    "url": "https://github.com/littlenines/resize-quill-image/issues"
+  },
+  "author": "littlenines",
   "license": "MIT",
   "scripts": {
     "build": "vite build && node -e \"require('fs').cpSync('src/index.d.ts', 'dist/index.d.ts')\""
