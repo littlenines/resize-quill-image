@@ -1,0 +1,3 @@
+.no-selection::selection {
+    background: transparent !important;
+  }

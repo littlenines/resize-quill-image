@@ -1,0 +1,258 @@
+import { Module as y } from "quill";
+const r = "#AED2FF", f = "#687EFF", c = "#fff", h = {
+  minWidth: 16,
+  minHeight: 16,
+  noSelectionClass: "no-selection",
+  handleStyles: {
+    position: "absolute",
+    width: "15px",
+    height: "15px",
+    backgroundColor: r,
+    border: `1px solid ${f}`
+  },
+  overlayStyles: {
+    position: "absolute",
+    boxSizing: "border-box",
+    border: "1px dashed #777",
+    zIndex: 8
+  },
+  positions: [
+    { top: 0, left: 0, clipPath: "polygon(0% 0%, 100% 0%, 0% 100%)" },
+    { top: 0, right: 0, clipPath: "polygon(100% 0%, 0% 0%, 100% 100%)" },
+    { bottom: 0, left: 0, clipPath: "polygon(0% 100%, 100% 100%, 0% 0%)" },
+    { bottom: 0, right: 0, clipPath: "polygon(100% 100%, 0% 100%, 100% 0%)" }
+  ],
+  displaySizeStyles: {
+    position: "absolute",
+    fontSize: "12px",
+    backgroundColor: r,
+    color: c,
+    padding: "2px 4px",
+    borderRadius: "4px",
+    userSelect: "none",
+    pointerEvents: "none"
+  },
+  displaySizePositionStyles: {
+    right: "20px",
+    bottom: "5px",
+    left: "auto"
+  },
+  tooltip: {
+    iconStyles: {
+      position: "absolute",
+      top: "8px",
+      right: "8px",
+      width: "20px",
+      height: "20px",
+      background: r,
+      color: c,
+      borderRadius: "50%",
+      textAlign: "center",
+      lineHeight: "20px",
+      fontSize: "14px",
+      cursor: "pointer",
+      userSelect: "none"
+    },
+    textStyles: {
+      position: "absolute",
+      background: r,
+      color: c,
+      padding: "6px 8px",
+      borderRadius: "4px",
+      display: "none",
+      pointerEvents: "none",
+      fontSize: "12px",
+      whiteSpace: "pre"
+    }
+  }
+};
+class v {
+  constructor(t, e) {
+    this.parent = t, this.styles = e, this.overlay = null;
+  }
+  create() {
+    this.overlay = document.createElement("div"), Object.assign(this.overlay.style, this.styles), this.parent.appendChild(this.overlay);
+  }
+  remove() {
+    this.overlay && (this.overlay.remove(), this.overlay = null);
+  }
+  reposition(t) {
+    if (!this.overlay) return;
+    const e = t.getBoundingClientRect(), i = this.parent.getBoundingClientRect();
+    Object.assign(this.overlay.style, {
+      left: `${e.left - i.left - 1 + this.parent.scrollLeft}px`,
+      top: `${e.top - i.top + this.parent.scrollTop}px`,
+      width: `${e.width}px`,
+      height: `${e.height}px`
+    });
+  }
+}
+class M {
+  constructor(t, e, i, n) {
+    this.overlay = t, this.positions = e, this.handleStyles = i, this.mousedownCallback = n, this.boxes = [];
+  }
+  createHandles() {
+    this.positions.forEach((t, e) => {
+      const i = document.createElement("div");
+      Object.assign(i.style, this.handleStyles, t), i.style.clipPath = t.clipPath, e === 0 || e === 3 ? i.style.cursor = "nwse-resize" : (e === 1 || e === 2) && (i.style.cursor = "nesw-resize"), i.addEventListener("mousedown", this.mousedownCallback, !1), i.addEventListener("touchstart", this.mousedownCallback, { passive: !1 }), this.overlay.appendChild(i), this.boxes.push(i);
+    });
+  }
+  removeHandles() {
+    this.boxes.forEach((t) => {
+      t.removeEventListener("mousedown", this.mousedownCallback), t.removeEventListener("touchstart", this.mousedownCallback), t.onmousedown = null, t.ontouchstart = null, t.remove();
+    }), this.boxes = [], this.overlay = null, this.positions = null, this.handleStyles = null, this.mousedownCallback = null;
+  }
+}
+class S {
+  constructor(t, e, i, n, a) {
+    this.minWidth = t, this.minHeight = e, this.overlayManager = i, this.displaySizeManager = n, this.tooltipInfoManager = a, this.img = null, this.dragBox = null, this.startX = 0, this.startY = 0, this.startWidth = 0, this.startHeight = 0, this.handleDrag = this.handleDrag.bind(this), this.handleMouseup = this.handleMouseup.bind(this);
+  }
+  setDisplaySizeManager(t) {
+    this.displaySizeManager = t;
+  }
+  setTooltipInfoManager(t) {
+    this.tooltipInfoManager = t;
+  }
+  addEventListeners() {
+    document.addEventListener("mousemove", this.handleDrag), document.addEventListener("touchmove", this.handleDrag, { passive: !1 }), document.addEventListener("mouseup", this.handleMouseup, !0), document.addEventListener("touchend", this.handleMouseup, !0), document.addEventListener("touchcancel", this.handleMouseup, !0);
+  }
+  removeEventListeners() {
+    document.removeEventListener("mousemove", this.handleDrag), document.removeEventListener("touchmove", this.handleDrag), document.removeEventListener("mouseup", this.handleMouseup, !0), document.removeEventListener("touchend", this.handleMouseup, !0), document.removeEventListener("touchcancel", this.handleMouseup, !0);
+  }
+  startDragging(t, e, i) {
+    t.preventDefault(), this.img = e, this.dragBox = i, t.type === "touchstart" ? (this.startX = t.changedTouches[0].clientX, this.startY = t.changedTouches[0].clientY) : (this.startX = t.clientX, this.startY = t.clientY), this.startWidth = e.width || e.naturalWidth, this.startHeight = e.height || e.naturalHeight, this.addEventListeners();
+  }
+  handleDrag(t) {
+    if (!this.img) return;
+    let e, i;
+    t.type === "touchmove" ? (e = t.changedTouches[0].clientX, i = t.changedTouches[0].clientY) : (e = t.clientX, i = t.clientY);
+    let n = e - this.startX, a = i - this.startY, p = this.startWidth / this.startHeight;
+    const u = t.ctrlKey, g = t.shiftKey, m = t.altKey;
+    if (u) {
+      let s = this.startWidth + n, o = this.startHeight + a;
+      s = Math.max(s, this.minWidth), o = Math.max(o, this.minHeight), this.img.style.width = `${s}px`, this.img.style.height = `${o}px`;
+    } else if (g) {
+      let s = this.startHeight + a;
+      this.img.style.height = `${Math.max(s, this.minHeight)}px`;
+    } else if (m) {
+      let s = this.startWidth + n;
+      this.img.style.width = `${Math.max(s, this.minWidth)}px`;
+    } else {
+      const s = Math.abs(n) > Math.abs(a) ? n : a;
+      let o = this.startWidth + s, d = o / p;
+      o = Math.max(o, this.minWidth), d = Math.max(d, this.minHeight), this.img.style.width = `${o}px`, this.img.style.height = `${d}px`;
+    }
+    this.overlayManager && this.overlayManager.reposition(this.img), this.displaySizeManager && this.displaySizeManager.update(), this.tooltipInfoManager && this.tooltipInfoManager.update(), this.startX = e, this.startY = i, this.startWidth = this.img.offsetWidth, this.startHeight = this.img.offsetHeight;
+  }
+  handleMouseup() {
+    this.removeEventListeners(), this.img = null, this.dragBox = null;
+  }
+  destroy() {
+    this.removeEventListeners(), this.img = null, this.dragBox = null, this.overlayManager = null, this.displaySizeManager = null, this.tooltipInfoManager = null;
+  }
+}
+class x {
+  constructor(t, e) {
+    this.overlay = t, this.img = e, this.display = null;
+  }
+  create() {
+    this.display = document.createElement("div"), Object.assign(this.display.style, h.displaySizeStyles), this.overlay.appendChild(this.display), this.update();
+  }
+  update() {
+    if (!this.display || !this.img) return;
+    const t = this.img.offsetWidth, e = this.img.offsetHeight;
+    this.display.innerHTML = `${t} × ${e}`;
+    const i = this.display.getBoundingClientRect();
+    t > 120 && e > 30 ? Object.assign(this.display.style, h.displaySizePositionStyles) : Object.assign(this.display.style, {
+      right: `-${i.width + 4}px`,
+      bottom: "0",
+      left: "auto"
+    });
+  }
+  remove() {
+    this.display && (this.display.remove(), this.display = null, this.overlay = null, this.img = null);
+  }
+}
+class b {
+  constructor(t) {
+    this.overlay = t, this.icon = null, this.tooltip = null, this.handleMouseEnter = this.handleMouseEnter.bind(this), this.handleMouseLeave = this.handleMouseLeave.bind(this);
+  }
+  create() {
+    this.icon = document.createElement("div"), this.icon.textContent = "?", Object.assign(this.icon.style, h.tooltip.iconStyles), this.tooltip = document.createElement("div"), this.tooltip.textContent = `Shift for vertical
+Ctrl for custom
+Alt for horizontal`, Object.assign(this.tooltip.style, { ...h.tooltip.textStyles }), this.icon.addEventListener("mouseenter", this.handleMouseEnter), this.icon.addEventListener("mouseleave", this.handleMouseLeave), this.overlay.appendChild(this.icon), this.overlay.appendChild(this.tooltip), this.update();
+  }
+  handleMouseEnter() {
+    this.tooltip && (this.tooltip.style.display = "block");
+  }
+  handleMouseLeave() {
+    this.tooltip && (this.tooltip.style.display = "none");
+  }
+  update() {
+    if (!this.icon || !this.tooltip) return;
+    const t = this.icon.getBoundingClientRect(), e = this.icon.offsetTop + 25, i = t.left - 100;
+    Object.assign(this.tooltip.style, {
+      top: `${e}px`,
+      left: `${i}px`
+    });
+  }
+  remove() {
+    !this.icon && !this.tooltip || (this.icon && (this.icon.removeEventListener("mouseenter", this.handleMouseEnter), this.icon.removeEventListener("mouseleave", this.handleMouseLeave), this.icon.remove(), this.icon = null), this.tooltip && (this.tooltip.remove(), this.tooltip = null), this.overlay = null);
+  }
+}
+const C = ".no-selection::selection{background:transparent!important}", E = (l) => {
+  if (typeof document > "u") return;
+  const t = document.createElement("style");
+  t.textContent = l, document.head.appendChild(t);
+};
+E(C);
+class w extends y {
+  constructor(t, e = {}) {
+    super(t, e), this.quill = t, this.options = { helpIcon: !0, displaySize: !0, styleSelection: !0, ...h, ...e }, this.img = null, this.overlayManager = new v(this.quill.root.parentNode, this.options.overlayStyles), this.dragController = new S(this.options.minWidth, this.options.minHeight, this.overlayManager, null, null), this.imageFormat = this.quill.constructor.import("formats/image"), this.bindHandlers(), this.addEventListeners();
+  }
+  bindHandlers() {
+    this.handleClick = this.handleClick.bind(this), this.handleSelectionChange = this.handleSelectionChange.bind(this), this.handleTextChange = this.handleTextChange.bind(this), this.handleMousedown = this.handleMousedown.bind(this);
+  }
+  addEventListeners() {
+    this.quill.root.addEventListener("click", this.handleClick), this.quill.on("selection-change", this.handleSelectionChange), this.quill.on("text-change", this.handleTextChange);
+  }
+  removeEventListeners() {
+    this.quill.root.removeEventListener("click", this.handleClick), this.quill.off("selection-change", this.handleSelectionChange), this.quill.off("text-change", this.handleTextChange);
+  }
+  handleClick(t) {
+    if (t.target.tagName === "IMG") {
+      const e = this.quill.constructor.find(t.target);
+      e && this.quill.setSelection(e.offset(this.quill.scroll), e.length());
+    }
+  }
+  handleSelectionChange(t) {
+    if (!t) return this.hide();
+    const [e] = this.quill.scroll.descendant(this.quill.constructor.import("formats/image"), t.index);
+    e && e.domNode instanceof HTMLImageElement ? (this.disableTextSelection(), this.show(e.domNode)) : (this.enableTextSelection(), this.hide());
+  }
+  disableTextSelection() {
+    this.options.styleSelection && this.quill.root.classList.add(this.options.noSelectionClass);
+  }
+  enableTextSelection() {
+    this.options.styleSelection && this.quill.root.classList.remove(this.options.noSelectionClass);
+  }
+  handleTextChange() {
+    this.img && (this.quill.root.contains(this.img) ? (this.overlayManager.reposition(this.img), this.displaySizeManager && this.displaySizeManager.update(), this.tooltipInfoManager && this.tooltipInfoManager.update()) : (this.hide(), this.enableTextSelection()));
+  }
+  show(t) {
+    this.img !== t && (!t || !(t instanceof HTMLImageElement) || (this.hide(), this.img = t, this.overlayManager.overlay || this.overlayManager.create(), this.handleManager = new M(this.overlayManager.overlay, this.options.positions, this.options.handleStyles, this.handleMousedown), this.handleManager.createHandles(), this.overlayManager.reposition(this.img), this.options.displaySize && (this.displaySizeManager = new x(this.overlayManager.overlay, this.img), this.displaySizeManager.create(), this.dragController.setDisplaySizeManager(this.displaySizeManager)), this.options.helpIcon && (this.tooltipInfoManager = new b(this.overlayManager.overlay), this.tooltipInfoManager.create(), this.dragController.setTooltipInfoManager(this.tooltipInfoManager))));
+  }
+  hide() {
+    this.dragController.setDisplaySizeManager(null), this.dragController.setTooltipInfoManager(null), this.handleManager && this.handleManager.removeHandles(), this.overlayManager.remove(), this.displaySizeManager && this.displaySizeManager.remove(), this.displaySizeManager = null, this.tooltipInfoManager && (this.tooltipInfoManager.remove(), this.tooltipInfoManager = null), this.img = null;
+  }
+  handleMousedown(t) {
+    t.target instanceof HTMLElement && this.dragController.startDragging(t, this.img, t.target);
+  }
+  destroy() {
+    var t;
+    this.removeEventListeners(), this.hide(), (t = this.dragController) == null || t.destroy(), this.dragController = null;
+  }
+}
+export {
+  w as default
+};
