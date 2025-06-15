@@ -25,6 +25,8 @@ You can find these cases and their solutions in the [Problems](#problems) sectio
 - [License](#license)
 
 ---
+## Demo GIF
+![](images/demo.gif)
 
 ## 📦 [Installation](#installation)
 
@@ -80,9 +82,9 @@ imageResize: {
 
 | Option           | Default | Description                                                                                                      |
 |------------------|---------|------------------------------------------------------------------------------------------------------------------|
-| `helpIcon`       | `true`  | Shows a `?` icon on the image overlay. Describes keyboard shortcuts:<br>• `Shift` → vertical<br>• `Alt` → horizontal<br>• `Ctrl` → custom/free resize |
-| `displaySize`    | `true`  | Displays current image width and height as a badge while resizing.                                              |
-| `styleSelection` | `true`  | Disables the blue selection overlay. To keep default behavior: `imageResize: { styleSelection: false }` |
+| `helpIcon`       | `true`  | Shows a `?` icon on the image overlay. Describes keyboard shortcuts:<br>• `Shift` → vertical<br>• `Alt` → horizontal<br>• `Ctrl` → custom/free resize <br> ![](https://github.com/littlenines/resize-quill-image/blob/ec361ecea1d93ca7b343f367e4d0956a5dc56432/images/controls.png) |
+| `displaySize`    | `true`  | Displays current image width and height as a badge while resizing. <br> ![](https://github.com/littlenines/resize-quill-image/blob/ec361ecea1d93ca7b343f367e4d0956a5dc56432/images/badge.png)                                             |
+| `styleSelection` | `true`  | Disables the blue selection overlay. To keep default behavior: `imageResize: { styleSelection: false }` <br> ![](images/style-selection.png) |
 
 ---
 
@@ -185,3 +187,7 @@ Free for personal and commercial use.
 > If you encounter any bugs, memory leaks, or unexpected behavior, feel free to open an issue on the [GitHub repository](https://github.com/littlenines/resize-quill-image/issues).  
 > Your feedback helps make the module better for everyone.
 > If you want to contribute to the project — whether it's fixing a bug or improving performance — your contributions are welcome and appreciated.
+
+> [!TIP]
+> If you just want the code and prefer to build your own module on top of it, you're free to do that.  
+> Everything is located in the `/src` directory for full access and customization.
