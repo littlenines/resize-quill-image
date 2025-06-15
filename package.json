@@ -1,6 +1,6 @@
 {
   "name": "resize-quill-image",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A lightweight Quill module to resize images with handles and overlays",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
