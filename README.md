@@ -172,7 +172,7 @@ Add this to your HTML:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 ```
 
-More info in the Quill docs for newer highligth.js cdn version:  
+More info in the Quill docs for newer highlight.js cdn version:  
 https://quilljs.com/docs/modules/syntax#syntax-highlighter-module
 
 ## [License](#license)
