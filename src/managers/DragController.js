@@ -87,14 +87,18 @@ export class DragController {
       newWidth = Math.max(newWidth, this.minWidth);
       newHeight = Math.max(newHeight, this.minHeight);
 
-      this.img.style.width = `${newWidth}px`;
-      this.img.style.height = `${newHeight}px`;
+      this.img.width = Math.round(newWidth);
+      this.img.height = Math.round(newHeight);
     } else if (isShiftPressed) {
       let newHeight = this.startHeight + deltaY;
-      this.img.style.height = `${Math.max(newHeight, this.minHeight)}px`;
+      newHeight = Math.max(newHeight, this.minHeight);
+
+      this.img.height = Math.round(newHeight);
     } else if (isAltPressed) {
       let newWidth = this.startWidth + deltaX;
-      this.img.style.width = `${Math.max(newWidth, this.minWidth)}px`;
+      newWidth = Math.max(newWidth, this.minWidth);
+
+      this.img.width = Math.round(newWidth);
     } else {
       const delta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
       let newWidth = this.startWidth + delta;
@@ -103,8 +107,8 @@ export class DragController {
       newWidth = Math.max(newWidth, this.minWidth);
       newHeight = Math.max(newHeight, this.minHeight);
 
-      this.img.style.width = `${newWidth}px`;
-      this.img.style.height = `${newHeight}px`;
+      this.img.width = Math.round(newWidth);
+      this.img.height = Math.round(newHeight);
     }
 
     if (this.overlayManager) this.overlayManager.reposition(this.img);
@@ -125,11 +129,11 @@ export class DragController {
   }
 
   destroy() {
-  this.removeEventListeners();
-  this.img = null;
-  this.dragBox = null;
-  this.overlayManager = null;
-  this.displaySizeManager = null;
-  this.tooltipInfoManager = null;
-}
+    this.removeEventListeners();
+    this.img = null;
+    this.dragBox = null;
+    this.overlayManager = null;
+    this.displaySizeManager = null;
+    this.tooltipInfoManager = null;
+  }
 }

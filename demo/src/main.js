@@ -8,14 +8,14 @@ import ImageResize from '../../src/ImageResize';
 
 document.querySelector('#app').innerHTML = `
   <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
+    <img src="${viteLogo}" class="logo" alt="Vite logo" />
+    <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
 
     <div id="editor"></div>
+
+    <p>Delta Testing: Save the image after resizing ( locale storage ) -> Delete the image -> Click Load and it should be the same size and image you resized </p>
+    <button id="save">💾 Save</button>
+    <button id="load">🔄 Load</button>
 
   </div>
 `;
@@ -51,5 +51,17 @@ const quill = new Quill('#editor', {
   },
   placeholder: 'Compose an epic...',
   theme: 'snow',
+});
+
+// Quick testing for Delta 
+document.getElementById('save').addEventListener('click', () => {
+  const delta = quill.getContents();
+  localStorage.setItem('quill-article', JSON.stringify(delta));
+  alert('Saved!');
+});
+
+document.getElementById('load').addEventListener('click', () => {
+  const data = localStorage.getItem('quill-article');
+  if (data) quill.setContents(JSON.parse(data));
 });
 

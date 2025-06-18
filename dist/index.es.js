@@ -126,21 +126,21 @@ class S {
     if (!this.img) return;
     let e, i;
     t.type === "touchmove" ? (e = t.changedTouches[0].clientX, i = t.changedTouches[0].clientY) : (e = t.clientX, i = t.clientY);
-    let n = e - this.startX, a = i - this.startY, p = this.startWidth / this.startHeight;
-    const u = t.ctrlKey, g = t.shiftKey, m = t.altKey;
-    if (u) {
+    let n = e - this.startX, a = i - this.startY, u = this.startWidth / this.startHeight;
+    const p = t.ctrlKey, g = t.shiftKey, m = t.altKey;
+    if (p) {
       let s = this.startWidth + n, o = this.startHeight + a;
-      s = Math.max(s, this.minWidth), o = Math.max(o, this.minHeight), this.img.style.width = `${s}px`, this.img.style.height = `${o}px`;
+      s = Math.max(s, this.minWidth), o = Math.max(o, this.minHeight), this.img.width = Math.round(s), this.img.height = Math.round(o);
     } else if (g) {
       let s = this.startHeight + a;
-      this.img.style.height = `${Math.max(s, this.minHeight)}px`;
+      s = Math.max(s, this.minHeight), this.img.height = Math.round(s);
     } else if (m) {
       let s = this.startWidth + n;
-      this.img.style.width = `${Math.max(s, this.minWidth)}px`;
+      s = Math.max(s, this.minWidth), this.img.width = Math.round(s);
     } else {
       const s = Math.abs(n) > Math.abs(a) ? n : a;
-      let o = this.startWidth + s, d = o / p;
-      o = Math.max(o, this.minWidth), d = Math.max(d, this.minHeight), this.img.style.width = `${o}px`, this.img.style.height = `${d}px`;
+      let o = this.startWidth + s, d = o / u;
+      o = Math.max(o, this.minWidth), d = Math.max(d, this.minHeight), this.img.width = Math.round(o), this.img.height = Math.round(d);
     }
     this.overlayManager && this.overlayManager.reposition(this.img), this.displaySizeManager && this.displaySizeManager.update(), this.tooltipInfoManager && this.tooltipInfoManager.update(), this.startX = e, this.startY = i, this.startWidth = this.img.offsetWidth, this.startHeight = this.img.offsetHeight;
   }
