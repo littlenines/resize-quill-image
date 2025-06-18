@@ -1,11 +1,21 @@
+<p align="center">
+  <img src="images/logo-main.png" alt="Logo" />
+</p>
 <p align="center"> <h1 align="center">resize-quill-image</h1> </p>
+<p align="center">
+  <img src="https://img.shields.io/npm/v/resize-quill-image" alt="version" />
+  <img src="https://img.shields.io/bundlephobia/minzip/resize-quill-image" alt="size" />
+  <img src="https://img.shields.io/npm/l/resize-quill-image" alt="license" />
+</p>
 
-*`resize-quill-image` is a lightweight Quill module that enables image resizing inside the editor.
+
+
+`resize-quill-image` is a lightweight Quill module that enables image resizing inside the editor.
 
 This module was originally created because we needed a working image resize solution for our own project.  
 Most existing Quill modules were either deprecated or not updated for the latest Quill versions.  
 While there are a few small issues, they’re usually project-specific and not caused by the module itself.  
-You can find these cases and their solutions in the [Problems](#problems) section.*
+You can find these cases and their solutions in the [Problems](#problems) section.
 
 ---
 - [Installation](#installation)
