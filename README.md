@@ -8,8 +8,6 @@
   <img src="https://img.shields.io/npm/l/resize-quill-image" alt="license" />
 </p>
 
-
-
 `resize-quill-image` is a lightweight Quill module that enables image resizing inside the editor.
 
 This module was originally created because we needed a working image resize solution for our own project.  
