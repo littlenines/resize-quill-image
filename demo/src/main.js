@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg';
 
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import ImageResize from '../../src/ImageResize';
+import ImageResize from '@src/ImageResize.js';
 
 document.querySelector('#app').innerHTML = `
   <div>

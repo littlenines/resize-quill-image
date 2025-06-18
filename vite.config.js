@@ -6,7 +6,7 @@ export default defineConfig({
       entry: 'src/ImageResize.js',
       name: 'ImageResize',
       fileName: (format) => `index.${format}.js`,
-      formats: ['es', 'cjs'],
+      formats: ['es', 'cjs', "iife"],
     },
     rollupOptions: {
       external: ['quill'],
