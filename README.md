@@ -6,6 +6,9 @@
   <img src="https://img.shields.io/npm/v/resize-quill-image" alt="version" />
   <img src="https://img.shields.io/bundlephobia/minzip/resize-quill-image" alt="size" />
   <img src="https://img.shields.io/npm/l/resize-quill-image" alt="license" />
+  <a href="https://resize-quill-image.vercel.app/">
+    <img src="https://img.shields.io/badge/Live-Demo-00c7b7?logo=vercel&logoColor=white&style=flat-square" alt="Deploy with Vercel" />
+  </a>
 </p>
 
 `resize-quill-image` is a lightweight Quill module that enables image resizing inside the editor.
@@ -16,6 +19,7 @@ While there are a few small issues, they’re usually project-specific and not c
 You can find these cases and their solutions in the [Problems](#problems) section.
 
 ---
+- [Demo](#demo)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Import the module](#1-import-the-module)
@@ -33,10 +37,13 @@ You can find these cases and their solutions in the [Problems](#problems) sectio
 - [License](#license)
 
 ---
-## Demo GIF
+## [Demo](#demo)
+### Live
+[Check out the live demo](https://resize-quill-image.vercel.app/)
+### GIF
 ![](images/demo.gif)
 
-## 📦 [Installation](#installation)
+## [Installation](#installation)
 
 ```bash
 npm install resize-quill-image
