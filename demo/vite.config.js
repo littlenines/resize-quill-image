@@ -13,14 +13,18 @@ export default defineConfig({
   //     'resize-quill-image': resolve(__dirname, '../src/ImageResize.js'),
   //   },
   // },
+  // server: {
+  //   host: '0.0.0.0',
+  //   port: 5173,
+  // },
   build: {
-  rollupOptions: {
-    output: {
-      manualChunks: {
-        react: ['react', 'react-dom'],
-        quill: ['quill'],
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          quill: ['quill'],
+        },
       },
     },
-  },
-}
+  }
 });
