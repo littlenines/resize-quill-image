@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Scroll to top on image selection
 
+### Updated
+- Docs with live demo link
 ---
 
 ---
