@@ -220,9 +220,9 @@ class w extends y {
     this.quill.root.removeEventListener("click", this.handleClick), this.quill.off("selection-change", this.handleSelectionChange), this.quill.off("text-change", this.handleTextChange);
   }
   handleClick(t) {
-    if (t.target.tagName === "IMG") {
+    if (t.target instanceof HTMLImageElement) {
       const e = this.quill.constructor.find(t.target);
-      e && this.quill.setSelection(e.offset(this.quill.scroll), e.length());
+      e && (this.quill.setSelection(e.offset(this.quill.scroll), e.length(), "silent"), this.show(t.target), this.disableTextSelection());
     }
   }
   handleSelectionChange(t) {

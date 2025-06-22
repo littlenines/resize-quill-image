@@ -36,7 +36,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/littlenines/resize-quill-image.git"
+    "url": "git+https://github.com/littlenines/resize-quill-image.git"
   },
   "homepage": "https://github.com/littlenines/resize-quill-image#readme",
   "bugs": {
