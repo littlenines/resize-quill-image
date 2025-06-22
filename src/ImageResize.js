@@ -8,13 +8,12 @@ import { TooltipInfoManager } from "./managers/TooltipInfoManager.js";
 import css from './imageResize.css?inline';
 
 const injectCSS = (css) => {
-  if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined') return;
 
-  const style = document.createElement('style');
-  style.textContent = css;
-  document.head.appendChild(style);
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
 }
-
 
 injectCSS(css);
 
@@ -54,9 +53,13 @@ export default class ImageResize extends Module {
     }
 
     handleClick(evt) {
-        if (evt.target.tagName === "IMG") {
+        if (evt.target instanceof HTMLImageElement) {
             const blot = this.quill.constructor.find(evt.target);
-            if (blot) this.quill.setSelection(blot.offset(this.quill.scroll), blot.length());
+            if (blot) {
+                this.quill.setSelection(blot.offset(this.quill.scroll), blot.length(), 'silent');
+                this.show(evt.target); // manually show overlays since 'silent' skips selection-change
+                this.disableTextSelection();
+            }
         }
     }
 
