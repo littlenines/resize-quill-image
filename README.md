@@ -4,11 +4,11 @@
 <p align="center"> <h1 align="center">resize-quill-image</h1> </p>
 <p align="center">
   <img src="https://img.shields.io/npm/v/resize-quill-image" alt="version" />
-  <img src="https://img.shields.io/bundlephobia/minzip/resize-quill-image" alt="size" />
-  <img src="https://img.shields.io/npm/l/resize-quill-image" alt="license" />
-  <img src="https://img.shields.io/npm/dt/resize-quill-image.svg?style=flat&color=blue" alt="downloads" />
+  <img src="https://img.shields.io/bundlephobia/minzip/resize-quill-image?style=flat" alt="size" />
+  <img src="https://img.shields.io/npm/l/resize-quill-image?style=flat" alt="license" />
+  <img src="https://img.shields.io/npm/dt/resize-quill-image?style=flat&color=blue" alt="downloads" />
   <a href="https://resize-quill-image.vercel.app/">
-    <img src="https://img.shields.io/badge/Live-Demo-00c7b7?logo=vercel&logoColor=white&style=flat-square" alt="Deploy with Vercel" />
+    <img src="https://img.shields.io/badge/Live-Demo-00c7b7?logo=vercel&logoColor=white&style=flat-square" alt="Live Demo" />
   </a>
 </p>
 
