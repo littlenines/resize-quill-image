@@ -7,6 +7,7 @@
   <img src="https://img.shields.io/bundlephobia/minzip/resize-quill-image?style=flat" alt="size" />
   <img src="https://img.shields.io/npm/l/resize-quill-image?style=flat" alt="license" />
   <img src="https://img.shields.io/npm/dt/resize-quill-image?style=flat&color=blue&cacheSeconds=3600" alt="downloads" />
+  <img src="https://img.shields.io/badge/Quill_compatible-2.0.3-blue?style=flat&cacheSeconds=3600" alt="Quill compatible 2.0.3" />
   <a href="https://resize-quill-image.vercel.app/">
     <img src="https://img.shields.io/badge/Live-Demo-00c7b7?logo=vercel&logoColor=white&style=flat-square" alt="Live Demo" />
   </a>
@@ -207,4 +208,5 @@ Free for personal and commercial use.
 > [!TIP]
 > If you just want the code and prefer to build your own module on top of it, you're free to do that.  
 > Everything is located in the `/src` directory for full access and customization.
+
 
