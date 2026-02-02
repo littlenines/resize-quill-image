@@ -249,8 +249,7 @@ class w extends y {
     t.target instanceof HTMLElement && this.dragController.startDragging(t, this.img, t.target);
   }
   destroy() {
-    var t;
-    this.removeEventListeners(), this.hide(), (t = this.dragController) == null || t.destroy(), this.dragController = null;
+    this.removeEventListeners(), this.hide(), this.dragController?.destroy(), this.dragController = null;
   }
 }
 export {
