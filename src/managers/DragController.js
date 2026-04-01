@@ -47,6 +47,7 @@ export class DragController {
     this.dragBox = box;
 
     if (evt.type === "touchstart") {
+      if (!evt.changedTouches.length) return;
       this.startX = evt.changedTouches[0].clientX;
       this.startY = evt.changedTouches[0].clientY;
     } else {
@@ -65,6 +66,7 @@ export class DragController {
 
     let clientX, clientY;
     if (evt.type === "touchmove") {
+      if (!evt.changedTouches.length) return;
       clientX = evt.changedTouches[0].clientX;
       clientY = evt.changedTouches[0].clientY;
     } else {
@@ -74,7 +76,7 @@ export class DragController {
 
     let deltaX = clientX - this.startX;
     let deltaY = clientY - this.startY;
-    let aspectRatio = this.startWidth / this.startHeight;
+    let aspectRatio = this.startHeight !== 0 ? this.startWidth / this.startHeight : 1;
 
     const isCtrlPressed = evt.ctrlKey;
     const isShiftPressed = evt.shiftKey;

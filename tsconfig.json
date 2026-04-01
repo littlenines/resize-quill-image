@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["es2015", "dom"],
+    "strict": true,
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "noEmit": true,
+    "skipLibCheck": false,
+    "allowJs": true,
+    "checkJs": true,
+    "noImplicitAny": false,
+    "paths": {
+      "resize-quill-image": ["./src/index.d.ts"]
+    }
+  },
+  "include": ["types-test.ts", "src/**/*.js"]
+}

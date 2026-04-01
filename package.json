@@ -45,12 +45,14 @@
   "author": "littlenines",
   "license": "MIT",
   "scripts": {
+    "typecheck": "tsc",
     "build": "vite build && node -e \"require('fs').cpSync('src/index.d.ts', 'dist/index.d.ts')\""
   },
   "peerDependencies": {
     "quill": ">=1.3.7 <=2.0.3"
   },
   "devDependencies": {
+    "typescript": "^6.0.2",
     "vite": "^7.3.1"
   }
 }

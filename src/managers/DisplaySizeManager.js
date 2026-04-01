@@ -20,7 +20,7 @@ export class DisplaySizeManager {
         const width = this.img.offsetWidth;
         const height = this.img.offsetHeight;
 
-        this.display.innerHTML = `${width} × ${height}`;
+        this.display.textContent = `${width} × ${height}`;
 
         const dispRect = this.display.getBoundingClientRect();
 

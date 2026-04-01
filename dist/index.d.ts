@@ -1,26 +1,38 @@
-declare module 'resize-quill-image' {
-  import { Module } from 'quill';
+import Quill, { Module } from 'quill';
 
-  interface ImageResizeOptions {
-    helpIcon?: boolean;
-    displaySize?: boolean;
-    styleSelection?: boolean;
-    noSelectionClass?: string;
-    minWidth?: number;
-    minHeight?: number;
-    overlayStyles?: Record<string, any>;
-    handleStyles?: Record<string, any>;
-    positions?: Array<{
-      top?: number;
-      left?: number;
-      right?: number;
-      bottom?: number;
-      clipPath?: string;
-    }>;
-  }
+export type CSSStyles = Record<string, string | number>;
 
-  export default class ImageResize extends Module {
-    constructor(quill: any, options?: ImageResizeOptions);
-    destroy(): void;
-  }
+export interface HandlePosition {
+  top?: number;
+  left?: number;
+  right?: number;
+  bottom?: number;
+  clipPath?: string;
 }
+
+export interface TooltipOptions {
+  iconStyles?: CSSStyles;
+  textStyles?: CSSStyles;
+}
+
+export interface ImageResizeOptions {
+  helpIcon?: boolean;
+  displaySize?: boolean;
+  styleSelection?: boolean;
+  noSelectionClass?: string;
+  minWidth?: number;
+  minHeight?: number;
+  overlayStyles?: CSSStyles;
+  handleStyles?: CSSStyles;
+  displaySizeStyles?: CSSStyles;
+  displaySizePositionStyles?: CSSStyles;
+  tooltip?: TooltipOptions;
+  positions?: HandlePosition[];
+}
+
+declare class ImageResize extends Module<ImageResizeOptions> {
+  constructor(quill: Quill, options?: ImageResizeOptions);
+  destroy(): void;
+}
+
+export default ImageResize;
