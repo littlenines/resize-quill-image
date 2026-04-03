@@ -16,13 +16,17 @@ export class TooltipInfoManager {
     Object.assign(this.icon.style, DEFAULT_OPTIONS.tooltip.iconStyles);
 
     this.tooltip = document.createElement("div");
+    
     const tooltip = this.tooltip;
-    ["Shift for vertical", "Ctrl for custom", "Alt for horizontal"].forEach(line => {
-      const span = document.createElement("span");
-      span.textContent = line;
-      span.style.display = "block";
-      tooltip.appendChild(span);
-    });
+    ["Shift for vertical", "Ctrl for custom", "Alt for horizontal"].forEach(
+      (line) => {
+        const span = document.createElement("span");
+        span.textContent = line;
+        span.style.display = "block";
+        tooltip.appendChild(span);
+      },
+    );
+
     Object.assign(this.tooltip.style, DEFAULT_OPTIONS.tooltip.textStyles);
 
     this.icon.addEventListener("mouseenter", this.handleMouseEnter);
@@ -44,7 +48,7 @@ export class TooltipInfoManager {
 
   update() {
     if (!this.icon || !this.tooltip) return;
-    
+
     const top = this.icon.offsetTop + 25;
     const left = this.icon.offsetLeft - 100;
 

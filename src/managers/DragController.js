@@ -1,5 +1,11 @@
 export class DragController {
-  constructor(minWidth, minHeight, overlayManager, displaySizeManager, tooltipInfoManager) {
+  constructor(
+    minWidth,
+    minHeight,
+    overlayManager,
+    displaySizeManager,
+    tooltipInfoManager,
+  ) {
     this.minWidth = minWidth;
     this.minHeight = minHeight;
     this.overlayManager = overlayManager;
