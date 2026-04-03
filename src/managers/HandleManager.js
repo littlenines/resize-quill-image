@@ -8,13 +8,13 @@ export class HandleManager {
     }
 
     createHandles() {
-        this.positions.forEach((pos, index) => {
+        this.positions.forEach((pos) => {
             const box = document.createElement("div");
             Object.assign(box.style, this.handleStyles, pos);
             box.style.clipPath = pos.clipPath;
 
-            if (index === 0 || index === 3) box.style.cursor = "nwse-resize";
-            else if (index === 1 || index === 2) box.style.cursor = "nesw-resize";
+            const isDiagonalNWSE = (pos.top !== undefined && pos.left !== undefined) || (pos.bottom !== undefined && pos.right !== undefined);
+            box.style.cursor = isDiagonalNWSE ? "nwse-resize" : "nesw-resize";
 
             box.addEventListener("mousedown", this.mousedownCallback, false);
             box.addEventListener("touchstart", this.mousedownCallback, { passive: false });

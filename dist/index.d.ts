@@ -32,6 +32,8 @@ export interface ImageResizeOptions {
 
 declare class ImageResize extends Module<ImageResizeOptions> {
   constructor(quill: Quill, options?: ImageResizeOptions);
+  show(img: HTMLImageElement): void;
+  hide(): void;
   destroy(): void;
 }
 

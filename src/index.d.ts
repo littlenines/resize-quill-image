@@ -10,11 +10,6 @@ export interface HandlePosition {
   clipPath?: string;
 }
 
-export interface TooltipOptions {
-  iconStyles?: CSSStyles;
-  textStyles?: CSSStyles;
-}
-
 export interface ImageResizeOptions {
   helpIcon?: boolean;
   displaySize?: boolean;
@@ -25,13 +20,13 @@ export interface ImageResizeOptions {
   overlayStyles?: CSSStyles;
   handleStyles?: CSSStyles;
   displaySizeStyles?: CSSStyles;
-  displaySizePositionStyles?: CSSStyles;
-  tooltip?: TooltipOptions;
   positions?: HandlePosition[];
 }
 
 declare class ImageResize extends Module<ImageResizeOptions> {
   constructor(quill: Quill, options?: ImageResizeOptions);
+  show(img: HTMLImageElement): void;
+  hide(): void;
   destroy(): void;
 }
 

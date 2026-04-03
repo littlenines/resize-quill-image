@@ -22,11 +22,12 @@ export class OverlayManager {
         if (!this.overlay) return;
 
         const imgRect = img.getBoundingClientRect();
-        const containerRect = this.parent.getBoundingClientRect();
+        const positionedParent = this.overlay.offsetParent || this.parent;
+        const containerRect = positionedParent.getBoundingClientRect();
 
         Object.assign(this.overlay.style, {
-            left: `${imgRect.left - containerRect.left - 1 + this.parent.scrollLeft}px`,
-            top: `${imgRect.top - containerRect.top + this.parent.scrollTop}px`,
+            left: `${imgRect.left - containerRect.left - 1 + positionedParent.scrollLeft}px`,
+            top: `${imgRect.top - containerRect.top + positionedParent.scrollTop}px`,
             width: `${imgRect.width}px`,
             height: `${imgRect.height}px`,
         });

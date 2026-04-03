@@ -20,7 +20,16 @@ export default class ImageResize extends Module {
     constructor(quill, options = {}) {
         super(quill, options);
         this.quill = quill;
-        this.options = { helpIcon: true, displaySize: true, styleSelection: true, ...DEFAULT_OPTIONS, ...options };
+        this.options = {
+            helpIcon: true,
+            displaySize: true,
+            styleSelection: true,
+            ...DEFAULT_OPTIONS,
+            ...options,
+            overlayStyles: { ...DEFAULT_OPTIONS.overlayStyles, ...options.overlayStyles },
+            handleStyles: { ...DEFAULT_OPTIONS.handleStyles, ...options.handleStyles },
+            displaySizeStyles: { ...DEFAULT_OPTIONS.displaySizeStyles, ...options.displaySizeStyles },
+        };
         this.img = null;
 
         const rootParent = this.quill.root.parentNode;
@@ -104,7 +113,9 @@ export default class ImageResize extends Module {
     show(img) {
         if (this.img === img) return;
         if (!img || !(img instanceof HTMLImageElement)) return;
+        if (this._showing) return;
 
+        this._showing = true;
         this.hide();
 
         this.img = img;
@@ -114,7 +125,7 @@ export default class ImageResize extends Module {
         this.overlayManager?.reposition(this.img);
 
         if (this.options.displaySize) {
-            this.displaySizeManager = new DisplaySizeManager(this.overlayManager?.overlay, this.img);
+            this.displaySizeManager = new DisplaySizeManager(this.overlayManager?.overlay, this.img, this.options.displaySizeStyles);
             this.displaySizeManager.create();
             this.dragController?.setDisplaySizeManager(this.displaySizeManager);
         }
@@ -124,6 +135,8 @@ export default class ImageResize extends Module {
             this.tooltipInfoManager.create();
             this.dragController?.setTooltipInfoManager(this.tooltipInfoManager);
         }
+
+        this._showing = false;
     }
 
     hide() {

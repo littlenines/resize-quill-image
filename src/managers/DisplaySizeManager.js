@@ -1,15 +1,16 @@
 import { DEFAULT_OPTIONS } from "../constants";
 
 export class DisplaySizeManager {
-    constructor(overlay, img) {
+    constructor(overlay, img, displaySizeStyles) {
         this.overlay = overlay;
         this.img = img;
+        this.displaySizeStyles = displaySizeStyles;
         this.display = null;
     }
 
     create() {
         this.display = document.createElement("div");
-        Object.assign(this.display.style, DEFAULT_OPTIONS.displaySizeStyles);
+        Object.assign(this.display.style, this.displaySizeStyles);
         this.overlay.appendChild(this.display);
         this.update();
     }

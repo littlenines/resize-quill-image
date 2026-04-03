@@ -78,18 +78,18 @@ class v {
   }
   reposition(t) {
     if (!this.overlay) return;
-    const e = t.getBoundingClientRect(), i = this.parent.getBoundingClientRect();
+    const e = t.getBoundingClientRect(), i = this.overlay.offsetParent || this.parent, n = i.getBoundingClientRect();
     Object.assign(this.overlay.style, {
-      left: `${e.left - i.left - 1 + this.parent.scrollLeft}px`,
-      top: `${e.top - i.top + this.parent.scrollTop}px`,
+      left: `${e.left - n.left - 1 + i.scrollLeft}px`,
+      top: `${e.top - n.top + i.scrollTop}px`,
       width: `${e.width}px`,
       height: `${e.height}px`
     });
   }
 }
 class M {
-  constructor(t, e, i, o) {
-    this.overlay = t, this.positions = e, this.handleStyles = i, this.mousedownCallback = o, this.boxes = [];
+  constructor(t, e, i, n) {
+    this.overlay = t, this.positions = e, this.handleStyles = i, this.mousedownCallback = n, this.boxes = [];
   }
   createHandles() {
     this.positions.forEach((t, e) => {
@@ -104,8 +104,8 @@ class M {
   }
 }
 class S {
-  constructor(t, e, i, o, a) {
-    this.minWidth = t, this.minHeight = e, this.overlayManager = i, this.displaySizeManager = o, this.tooltipInfoManager = a, this.img = null, this.dragBox = null, this.startX = 0, this.startY = 0, this.startWidth = 0, this.startHeight = 0, this.handleDrag = this.handleDrag.bind(this), this.handleMouseup = this.handleMouseup.bind(this);
+  constructor(t, e, i, n, a) {
+    this.minWidth = t, this.minHeight = e, this.overlayManager = i, this.displaySizeManager = n, this.tooltipInfoManager = a, this.img = null, this.dragBox = null, this.startX = 0, this.startY = 0, this.startWidth = 0, this.startHeight = 0, this.handleDrag = this.handleDrag.bind(this), this.handleMouseup = this.handleMouseup.bind(this);
   }
   setDisplaySizeManager(t) {
     this.displaySizeManager = t;
@@ -117,7 +117,7 @@ class S {
     document.addEventListener("mousemove", this.handleDrag), document.addEventListener("touchmove", this.handleDrag, { passive: !1 }), document.addEventListener("mouseup", this.handleMouseup, !0), document.addEventListener("touchend", this.handleMouseup, !0), document.addEventListener("touchcancel", this.handleMouseup, !0);
   }
   removeEventListeners() {
-    document.removeEventListener("mousemove", this.handleDrag), document.removeEventListener("touchmove", this.handleDrag, { passive: !1 }), document.removeEventListener("mouseup", this.handleMouseup, !0), document.removeEventListener("touchend", this.handleMouseup, !0), document.removeEventListener("touchcancel", this.handleMouseup, !0);
+    document.removeEventListener("mousemove", this.handleDrag), document.removeEventListener("touchmove", this.handleDrag), document.removeEventListener("mouseup", this.handleMouseup, !0), document.removeEventListener("touchend", this.handleMouseup, !0), document.removeEventListener("touchcancel", this.handleMouseup, !0);
   }
   startDragging(t, e, i) {
     if (t.preventDefault(), this.img = e, this.dragBox = i, t.type === "touchstart") {
@@ -135,19 +135,19 @@ class S {
       e = t.changedTouches[0].clientX, i = t.changedTouches[0].clientY;
     } else
       e = t.clientX, i = t.clientY;
-    let o = e - this.startX, a = i - this.startY, u = this.startHeight !== 0 ? this.startWidth / this.startHeight : 1;
+    let n = e - this.startX, a = i - this.startY, u = this.startHeight !== 0 ? this.startWidth / this.startHeight : 1;
     const p = t.ctrlKey, g = t.shiftKey, m = t.altKey;
     if (p) {
-      let s = this.startWidth + o, l = this.startHeight + a;
+      let s = this.startWidth + n, l = this.startHeight + a;
       s = Math.max(s, this.minWidth), l = Math.max(l, this.minHeight), this.img.width = Math.round(s), this.img.height = Math.round(l);
     } else if (g) {
       let s = this.startHeight + a;
       s = Math.max(s, this.minHeight), this.img.height = Math.round(s);
     } else if (m) {
-      let s = this.startWidth + o;
+      let s = this.startWidth + n;
       s = Math.max(s, this.minWidth), this.img.width = Math.round(s);
     } else {
-      const s = Math.abs(o) > Math.abs(a) ? o : a;
+      const s = Math.abs(n) > Math.abs(a) ? n : a;
       let l = this.startWidth + s, d = l / u;
       l = Math.max(l, this.minWidth), d = Math.max(d, this.minHeight), this.img.width = Math.round(l), this.img.height = Math.round(d);
     }
@@ -199,10 +199,10 @@ Alt for horizontal`, Object.assign(this.tooltip.style, { ...h.tooltip.textStyles
   }
   update() {
     if (!this.icon || !this.tooltip) return;
-    const t = this.icon.getBoundingClientRect(), e = this.icon.offsetTop + 25, i = t.left - 100;
+    const t = this.icon.offsetTop + 25, e = this.icon.offsetLeft - 100;
     Object.assign(this.tooltip.style, {
-      top: `${e}px`,
-      left: `${i}px`
+      top: `${t}px`,
+      left: `${e}px`
     });
   }
   remove() {
@@ -211,8 +211,8 @@ Alt for horizontal`, Object.assign(this.tooltip.style, { ...h.tooltip.textStyles
 }
 const C = () => {
   if (typeof document > "u") return;
-  const n = document.createElement("style");
-  n.textContent = ".no-selection::selection { background: transparent !important; }", document.head.appendChild(n);
+  const o = document.createElement("style");
+  o.textContent = ".no-selection::selection { background: transparent !important; }", document.head.appendChild(o);
 };
 C();
 class L extends y {
@@ -249,19 +249,19 @@ class L extends y {
     this.options.styleSelection && this.quill.root.classList.remove(this.options.noSelectionClass);
   }
   handleTextChange() {
-    this.img && (this.quill.root.contains(this.img) ? (this.overlayManager.reposition(this.img), this.displaySizeManager && this.displaySizeManager.update(), this.tooltipInfoManager && this.tooltipInfoManager.update()) : (this.hide(), this.enableTextSelection()));
+    this.img && (this.quill.root.contains(this.img) ? (this.overlayManager?.reposition(this.img), this.displaySizeManager && this.displaySizeManager.update(), this.tooltipInfoManager && this.tooltipInfoManager.update()) : (this.hide(), this.enableTextSelection()));
   }
   show(t) {
-    this.img !== t && (!t || !(t instanceof HTMLImageElement) || (this.hide(), this.img = t, this.overlayManager.overlay || this.overlayManager.create(), this.handleManager = new M(this.overlayManager.overlay, this.options.positions, this.options.handleStyles, this.handleMousedown), this.handleManager.createHandles(), this.overlayManager.reposition(this.img), this.options.displaySize && (this.displaySizeManager = new x(this.overlayManager.overlay, this.img), this.displaySizeManager.create(), this.dragController.setDisplaySizeManager(this.displaySizeManager)), this.options.helpIcon && (this.tooltipInfoManager = new b(this.overlayManager.overlay), this.tooltipInfoManager.create(), this.dragController.setTooltipInfoManager(this.tooltipInfoManager))));
+    this.img !== t && (!t || !(t instanceof HTMLImageElement) || this._showing || (this._showing = !0, this.hide(), this.img = t, this.overlayManager?.overlay || this.overlayManager?.create(), this.handleManager = new M(this.overlayManager?.overlay, this.options.positions, this.options.handleStyles, this.handleMousedown), this.handleManager.createHandles(), this.overlayManager?.reposition(this.img), this.options.displaySize && (this.displaySizeManager = new x(this.overlayManager?.overlay, this.img), this.displaySizeManager.create(), this.dragController?.setDisplaySizeManager(this.displaySizeManager)), this.options.helpIcon && (this.tooltipInfoManager = new b(this.overlayManager?.overlay), this.tooltipInfoManager.create(), this.dragController?.setTooltipInfoManager(this.tooltipInfoManager)), this._showing = !1));
   }
   hide() {
-    this.dragController.setDisplaySizeManager(null), this.dragController.setTooltipInfoManager(null), this.handleManager && this.handleManager.removeHandles(), this.overlayManager.remove(), this.displaySizeManager && this.displaySizeManager.remove(), this.displaySizeManager = null, this.tooltipInfoManager && (this.tooltipInfoManager.remove(), this.tooltipInfoManager = null), this.img = null;
+    this.dragController?.setDisplaySizeManager(null), this.dragController?.setTooltipInfoManager(null), this.handleManager && this.handleManager.removeHandles(), this.overlayManager?.remove(), this.displaySizeManager && this.displaySizeManager.remove(), this.displaySizeManager = null, this.tooltipInfoManager && (this.tooltipInfoManager.remove(), this.tooltipInfoManager = null), this.img = null;
   }
   handleMousedown(t) {
-    t.target instanceof HTMLElement && this.dragController.startDragging(t, this.img, t.target);
+    t.target instanceof HTMLElement && this.dragController?.startDragging(t, this.img, t.target);
   }
   destroy() {
-    this.removeEventListeners(), this.hide(), this.dragController?.destroy(), this.dragController = null;
+    this.removeEventListeners(), this.hide(), this.dragController?.destroy(), this.dragController = null, this.overlayManager = null, this.quill = null;
   }
 }
 export {

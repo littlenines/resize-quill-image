@@ -15,9 +15,9 @@
 
 `resize-quill-image` is a lightweight Quill module that enables image resizing inside the editor.
 
-This module was originally created because we needed a working image resize solution for our own project.  
-Most existing Quill modules were either deprecated or not updated for the latest Quill versions.  
-While there are a few small issues, they’re usually project-specific and not caused by the module itself.  
+This module was originally created because we needed a working image resize solution for our own project.
+Most existing Quill modules were either deprecated or not updated for the latest Quill versions.
+While there are a few small issues, they're usually project-specific and not caused by the module itself.
 You can find these cases and their solutions in the [Problems](#problems) section.
 
 ---
@@ -29,6 +29,9 @@ You can find these cases and their solutions in the [Problems](#problems) sectio
   - [Configure the Quill editor](#3-configure-the-quill-editor)
 - [Options](#options)
   - [Option Descriptions](#option-descriptions)
+  - [Style Options](#style-options)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [TypeScript](#typescript)
 - [Cleanup / Destroy](#cleanup--destroy)
   - [Usage](#usage-1)
   - [When to use](#when-to-use)
@@ -97,11 +100,94 @@ imageResize: {
 
 ### [Option Descriptions](#option-descriptions)
 
-| Option           | Default | Description                                                                                                      |
-|------------------|---------|------------------------------------------------------------------------------------------------------------------|
-| `helpIcon`       | `true`  | Shows a `?` icon on the image overlay. Describes keyboard shortcuts:<br>• `Shift` → vertical<br>• `Alt` → horizontal<br>• `Ctrl` → custom/free resize <br> ![](https://github.com/littlenines/resize-quill-image/blob/ec361ecea1d93ca7b343f367e4d0956a5dc56432/images/controls.png) |
-| `displaySize`    | `true`  | Displays current image width and height as a badge while resizing. <br> ![](https://github.com/littlenines/resize-quill-image/blob/ec361ecea1d93ca7b343f367e4d0956a5dc56432/images/badge.png)                                             |
-| `styleSelection` | `true`  | Disables the blue selection overlay. To keep default behavior: `imageResize: { styleSelection: false }` <br> ![](images/style-selection.png) |
+| Option             | Type      | Default           | Description |
+|--------------------|-----------|-------------------|-------------|
+| `helpIcon`         | `boolean` | `true`            | Shows a `?` icon on the image overlay. Describes keyboard shortcuts:<br>• `Shift` → vertical<br>• `Alt` → horizontal<br>• `Ctrl` → custom/free resize <br> ![](https://github.com/littlenines/resize-quill-image/blob/ec361ecea1d93ca7b343f367e4d0956a5dc56432/images/controls.png) |
+| `displaySize`      | `boolean` | `true`            | Displays current image width and height as a badge while resizing. <br> ![](https://github.com/littlenines/resize-quill-image/blob/ec361ecea1d93ca7b343f367e4d0956a5dc56432/images/badge.png) |
+| `styleSelection`   | `boolean` | `true`            | Disables the blue selection overlay. To keep default behavior: `imageResize: { styleSelection: false }` <br> ![](images/style-selection.png) |
+| `minWidth`         | `number`  | `16`              | Minimum image width in pixels. |
+| `minHeight`        | `number`  | `16`              | Minimum image height in pixels. |
+| `positions`        | `array`   | 4 corners         | Array of handle position objects that control where resize handles appear on the image. Each object takes `{ top?, left?, right?, bottom?, clipPath? }`. |
+
+### [Style Options](#style-options)
+
+You can customize three visual elements. All style options accept a plain object of CSS properties (camelCase keys, string or number values). Your values are **merged with the defaults** — you only need to pass what you want to override.
+
+| Option              | Customizes |
+|---------------------|------------|
+| `overlayStyles`     | The dashed border that appears around the selected image. |
+| `handleStyles`      | The corner resize handles. |
+| `displaySizeStyles` | The width × height badge shown while resizing. |
+
+**Example:**
+
+```js
+const quill = new Quill(editorContainer, {
+  modules: {
+    toolbar: toolbarOptions,
+    imageResize: {
+      helpIcon: true,
+      displaySize: true,
+      styleSelection: true,
+      minWidth: 20,
+      minHeight: 20,
+      overlayStyles: {
+        border: '2px solid red',
+      },
+      handleStyles: {
+        backgroundColor: '#ff0000',
+        width: '12px',
+        height: '12px',
+      },
+      displaySizeStyles: {
+        backgroundColor: '#000',
+        color: '#fff',
+      },
+      positions: [
+        { top: 0, left: 0, clipPath: 'polygon(0% 0%, 100% 0%, 0% 100%)' },
+        { top: 0, right: 0, clipPath: 'polygon(100% 0%, 0% 0%, 100% 100%)' },
+        { bottom: 0, left: 0, clipPath: 'polygon(0% 100%, 100% 100%, 0% 0%)' },
+        { bottom: 0, right: 0, clipPath: 'polygon(100% 100%, 0% 100%, 100% 0%)' },
+      ],
+    },
+  },
+  theme: 'snow',
+});
+```
+
+---
+
+## [Keyboard Shortcuts](#keyboard-shortcuts)
+
+While dragging a resize handle, hold a modifier key to change resize behavior:
+
+| Key     | Behavior |
+|---------|-----------|
+| *(none)*  | Proportional resize — maintains aspect ratio |
+| `Shift` | Vertical only — changes height, width is unchanged |
+| `Alt`   | Horizontal only — changes width, height is unchanged |
+| `Ctrl`  | Free resize — width and height change independently |
+
+These shortcuts are also shown in the `?` tooltip on the overlay when `helpIcon: true`.
+
+---
+
+## [TypeScript](#typescript)
+
+This package ships TypeScript definitions. All option interfaces are exported for use in your own types:
+
+```ts
+import ImageResize from 'resize-quill-image';
+import type { ImageResizeOptions, HandlePosition, CSSStyles } from 'resize-quill-image';
+
+const options: ImageResizeOptions = {
+  helpIcon: true,
+  displaySize: true,
+  minWidth: 20,
+  overlayStyles: { border: '2px dashed #999' },
+  handleStyles: { backgroundColor: '#ff0000' },
+};
+```
 
 ---
 
@@ -113,7 +199,7 @@ This module provides a `destroy()` method that you can call when tearing down yo
 
 ### [Usage](#usage-1)
 
-Call the `destroy()` method on the `imageResize` module instance:
+Call `destroy()` **before** clearing the DOM:
 
 ```js
 const imageResizeModule = quill.getModule('imageResize');
@@ -121,7 +207,11 @@ const imageResizeModule = quill.getModule('imageResize');
 if (imageResizeModule?.destroy) {
   imageResizeModule.destroy();
 }
+
+container.innerHTML = '';
 ```
+
+> **Important:** Always call `destroy()` before removing the editor from the DOM. Clearing the DOM first can cause errors inside `destroy()` as it tries to clean up elements that no longer exist.
 
 This will:
 
@@ -145,6 +235,7 @@ useEffect(() => {
   return () => {
     const module = quill.getModule('imageResize');
     if (module?.destroy) module.destroy();
+    editorRef.current.innerHTML = '';
   };
 }, []);
 ```
@@ -191,22 +282,22 @@ Add this to your HTML:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 ```
 
-More info in the Quill docs for newer highlight.js cdn version:  
+More info in the Quill docs for newer highlight.js cdn version:
 https://quilljs.com/docs/modules/syntax#syntax-highlighter-module
 
 ## [License](#license)
 
-MIT License  
+MIT License
 Free for personal and commercial use.
 
 ---
 > [!NOTE]
-> If you encounter any bugs, memory leaks, or unexpected behavior, feel free to open an issue on the [GitHub repository](https://github.com/littlenines/resize-quill-image/issues).  
+> If you encounter any bugs, memory leaks, or unexpected behavior, feel free to open an issue on the [GitHub repository](https://github.com/littlenines/resize-quill-image/issues).
 > Your feedback helps make the module better for everyone.
 > If you want to contribute to the project — whether it's fixing a bug or improving performance — your contributions are welcome and appreciated.
 
 > [!TIP]
-> If you just want the code and prefer to build your own module on top of it, you're free to do that.  
+> If you just want the code and prefer to build your own module on top of it, you're free to do that.
 > Everything is located in the `/src` directory for full access and customization.
 
 
