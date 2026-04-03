@@ -10,11 +10,6 @@ export interface HandlePosition {
   clipPath?: string;
 }
 
-export interface TooltipOptions {
-  iconStyles?: CSSStyles;
-  textStyles?: CSSStyles;
-}
-
 export interface ImageResizeOptions {
   helpIcon?: boolean;
   displaySize?: boolean;
@@ -25,8 +20,6 @@ export interface ImageResizeOptions {
   overlayStyles?: CSSStyles;
   handleStyles?: CSSStyles;
   displaySizeStyles?: CSSStyles;
-  displaySizePositionStyles?: CSSStyles;
-  tooltip?: TooltipOptions;
   positions?: HandlePosition[];
 }
 
