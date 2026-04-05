@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>resize-quill-image CDN Test</title>
+  <link href="https://unpkg.com/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h1 { font-size: 1.2rem; margin-bottom: 16px; }
+    #editor { min-height: 500px; max-height: 500px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <h1>CDN test</h1>
+  <div id="editor"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://unpkg.com/quill@2.0.3/dist/quill.js"></script>
+  <script src="./dist/index.iife.js"></script>
+  <script>
+    Quill.register('modules/imageResize', ImageResize);
+
+    const quill = new Quill('#editor', {
+      theme: 'snow',
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          ['image', 'link']
+        ],
+        imageResize: {
+          displaySize: true,
+          helpIcon: true
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -23,6 +23,8 @@ You can find these cases and their solutions in the [Problems](#problems) sectio
 ---
 - [Demo](#demo)
 - [Installation](#installation)
+  - [npm](#npm)
+  - [CDN](#cdn)
 - [Usage](#usage)
   - [Import the module](#1-import-the-module)
   - [Register the module with Quill](#2-register-the-module-with-quill)
@@ -50,9 +52,55 @@ You can find these cases and their solutions in the [Problems](#problems) sectio
 
 ## [Installation](#installation)
 
+### [npm](#npm)
+
 ```bash
 npm install resize-quill-image
 ```
+
+### [CDN](#cdn)
+
+Load Quill first, then the module. The module exposes a global `ImageResize` variable.
+
+**unpkg:**
+```html
+<link href="https://unpkg.com/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://unpkg.com/quill@2.0.3/dist/quill.js"></script>
+<script src="https://unpkg.com/resize-quill-image/dist/index.iife.js"></script>
+```
+
+**jsDelivr:**
+```html
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/resize-quill-image/dist/index.iife.js"></script>
+```
+
+You can pin to a specific version:
+```html
+<script src="https://unpkg.com/resize-quill-image@1.0.10/dist/index.iife.js"></script>
+```
+
+Then register and use it:
+```html
+<script>
+  Quill.register('modules/imageResize', ImageResize);
+
+  const quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [['bold', 'italic'], ['image']],
+      imageResize: {}
+    }
+  });
+</script>
+```
+
+> **Note:** Quill must be loaded before `resize-quill-image`. The IIFE build reads `Quill` from the global scope at load time.
+
+> **Note:** Quill 2.x CDN support requires **`resize-quill-image@1.0.10`** or later. Earlier versions will throw an error when used with Quill 2.x via CDN.
 
 ---
 
@@ -266,6 +314,7 @@ Instead of a fixed height, use `min-height` and `max-height`:
 .ql-container {
   min-height: 500px;
   max-height: 500px;
+  overflow: auto;
 }
 ```
 

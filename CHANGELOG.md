@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.10] - 05-04-2026
+### Fixed
+- IIFE build now works with Quill 2.x — `Quill.Module` is patched via `Quill.import('core/module')` when not available on the global
+
+### Added
+- CDN usage section in README (unpkg / jsDelivr examples)
+
+---
+
 ## [1.0.9] - 04-04-2026
 ### Fixed
 - Memory leaks: destroy() now properly removes all event listeners and cleans up DOM references
