@@ -18,11 +18,21 @@ export default defineConfig({
   //   port: 5173,
   // },
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          react: ['react', 'react-dom'],
-          quill: ['quill'],
+        codeSplitting: {
+          groups: [
+            {
+              name: 'react',
+              test: /node_modules[\\/]react/,
+              priority: 20,
+            },
+            {
+              name: 'quill',
+              test: /node_modules[\\/]quill/,
+              priority: 15,
+            },
+          ],
         },
       },
     },
