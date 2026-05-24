@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.11] - 24-05-2026
+### Updated
+- Vite v8.0.14 project build
+
+---
+
 ## [1.0.10] - 05-04-2026
 ### Fixed
 - IIFE build now works with Quill 2.x — `Quill.Module` is patched via `Quill.import('core/module')` when not available on the global
