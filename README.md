@@ -58,6 +58,8 @@ You can find these cases and their solutions in the [Problems](#problems) sectio
 npm install resize-quill-image
 ```
 
+> **Compatible with [`react-quill-new`](https://www.npmjs.com/package/react-quill-new)** — works out of the box since `react-quill-new` uses Quill 2.x under the hood.
+
 ### [CDN](#cdn)
 
 Load Quill first, then the module. The module exposes a global `ImageResize` variable.

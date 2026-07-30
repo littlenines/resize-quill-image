@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.12] - 30-07-2026
+### Updated
+- Peer dependency range expanded to `>=1.3.7` — compatible with all Quill versions
+- Added `react-quill-new` compatibility note in README
+
+---
+
 ## [1.0.11] - 24-05-2026
 ### Updated
 - Vite v8.0.14 project build
