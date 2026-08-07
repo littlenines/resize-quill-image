@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.13] - 07-08-2026
+### Changed
+- `dist/` removed from version control — package is now built and published via GitHub Actions CI
+- Updated publish workflow: trigger changed to `published`, Node bumped to 24, added install/build/typecheck steps
+- `CHANGELOG.md` added to npm package files
+
+---
+
 ## [1.0.12] - 30-07-2026
 ### Updated
 - Peer dependency range expanded to `>=1.3.7` — compatible with all Quill versions
