@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.14] - 29-09-2026
+### Fixed
+- Placing the cursor just before an image no longer opens the resize UI
+- `destroy()` now removes the no-selection class from the editor, so text selection stays visible if the module is destroyed while an image is selected
+
+---
+
 ## [1.0.13] - 07-08-2026
 ### Changed
 - `dist/` removed from version control — package is now built and published via GitHub Actions CI

@@ -69,7 +69,9 @@ export default class ImageResize extends Module {
     handleSelectionChange(range) {
         if (!range) return this.hide();
 
-        const [blot] = this.quill.scroll.descendant(this.quill.constructor.import('formats/image'), range.index);
+        const [blot] = range.length === 1
+            ? this.quill.scroll.descendant(this.quill.constructor.import('formats/image'), range.index)
+            : [null];
 
         if (blot && blot.domNode instanceof HTMLImageElement) {
             this.disableTextSelection();
@@ -110,6 +112,7 @@ export default class ImageResize extends Module {
 
     destroy() {
         this.removeEventListeners();
+        this.enableTextSelection();
         this.uiController?.destroy();
         this.uiController = null;
         this.quill = null;
