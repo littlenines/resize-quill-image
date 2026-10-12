@@ -199,3 +199,22 @@ return () => {
   container.innerHTML = '';
 };
 ```
+
+---
+
+## Tests
+
+`npm test` runs the tests in `tests/` with Vitest, using a real Quill editor in jsdom. The publish workflow runs them before building. There's one file per area, and `tests/helpers.js` creates the editors and simulates clicks, drags and touches.
+
+| File | Covers |
+|---|---|
+| `selection.test.js` | Showing and hiding the UI, the selection check, switching images, cursor moves not rebuilding the document |
+| `resize-modes.test.js` | Default, Ctrl, Shift and Alt resizing, min size, touch, releasing the mouse |
+| `resize-history.test.js` | One resize = one edit and one undo step, drags that end early (blur, destroy, touch cancel) |
+| `overlay.test.js` | Handles and cursors, overlay position, size badge, help tooltip |
+| `options.test.js` | Every option, including style merging and custom `positions` |
+| `read-only.test.js` | No resizing when the editor is disabled |
+| `destroy.test.js` | Cleanup, and calling `destroy()` twice |
+| `module.test.js` | The injected CSS, the constructor error, `show()` / `hide()` |
+
+jsdom has no layout engine, so `tests/setup.js` stubs the few layout values Quill and the module read, and the overlay position test supplies its own element positions. The tests check the maths and the DOM, not how things look in a real browser, so still check the demo before releasing.
