@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.15] - 12-10-2026
+### Fixed
+- Moving the cursor no longer makes Quill rebuild its copy of the document on every selection change, which made typing and navigation slow in large documents
+
+---
+
 ## [1.0.14] - 29-09-2026
 ### Fixed
 - Placing the cursor just before an image no longer opens the resize UI

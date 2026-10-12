@@ -35,10 +35,12 @@ The constructor does three things:
 The three events it listens to:
 
 - **`click` on `quill.root`** — if you clicked an `<img>`, show the resize UI.
-- **Quill `selection-change`** — handles keyboard navigation and programmatic selection. If the selection lands on an image, show the UI; if not, hide it.
+- **Quill `selection-change`** — handles keyboard navigation and programmatic selection. If the selection is exactly one image (`range.length === 1`), show the UI; otherwise hide it. A collapsed cursor just before an image doesn't count, even though Quill finds the image at that index.
 - **Quill `text-change`** — if content changes while an image is active (e.g. someone pastes text), we check if that image still exists in the editor. If it was deleted, hide the UI. If it's still there, reposition the overlay in case the layout shifted.
 
-`destroy()` is the cleanup method. It removes all three listeners, calls `uiController.destroy()`, and nulls its own references so nothing gets held in memory. You need to call this yourself when unmounting — see the Lifecycle section at the bottom.
+While an image is selected, the `no-selection` class (`noSelectionClass`) is on `quill.root`; it comes off again when the selection moves away. `enableTextSelection()` / `disableTextSelection()` use `classList.toggle(name, force)` rather than `add()` / `remove()` on purpose. `add()` and `remove()` always rewrite the `class` attribute, even when nothing changes. Quill watches `quill.root` for attribute changes and treats each one as an edit, rebuilding its copy of the whole document. `selection-change` fires on every cursor move, so that made typing and navigation slow in large documents. `toggle()` with a force argument doesn't touch the attribute when the class is already in the right state.
+
+`destroy()` is the cleanup method. It removes all three listeners, removes the `no-selection` class, calls `uiController.destroy()`, and nulls its own references so nothing gets held in memory. You need to call this yourself when unmounting — see the Lifecycle section at the bottom.
 
 ---
 
@@ -172,6 +174,7 @@ ImageResize.hide() → ResizeUIController.hide()
 ```
 ImageResize.destroy()
   → removes click / selection-change / text-change listeners
+  → removes the no-selection class from quill.root
   → ResizeUIController.destroy()
       → hide() (removes all DOM elements)
       → DragController.destroy() (removes document listeners)

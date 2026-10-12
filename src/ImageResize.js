@@ -95,11 +95,11 @@ export default class ImageResize extends Module {
     }
 
     disableTextSelection() {
-        if (this.options.styleSelection) this.quill.root.classList.add(this.options.noSelectionClass);
+        if (this.options.styleSelection) this.quill.root.classList.toggle(this.options.noSelectionClass, true);
     }
 
     enableTextSelection() {
-        if (this.options.styleSelection) this.quill.root.classList.remove(this.options.noSelectionClass);
+        if (this.options.styleSelection) this.quill.root.classList.toggle(this.options.noSelectionClass, false);
     }
 
     show(img) {
