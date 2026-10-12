@@ -5,7 +5,7 @@ import { DisplaySizeManager } from "./DisplaySizeManager.js";
 import { TooltipInfoManager } from "./TooltipInfoManager.js";
 
 export class ResizeUIController {
-  constructor(parent, options) {
+  constructor(parent, options, quill) {
     this.options = options;
     this.img = null;
     this._showing = false;
@@ -19,6 +19,7 @@ export class ResizeUIController {
       this.overlayManager,
       null,
       null,
+      quill,
     );
 
     this.handleMousedown = this.handleMousedown.bind(this);

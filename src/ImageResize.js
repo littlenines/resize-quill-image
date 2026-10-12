@@ -31,7 +31,7 @@ export default class ImageResize extends Module {
         if (!rootParent) throw new Error('ImageResize: quill.root has no parentNode');
 
         /** @type {ResizeUIController | null} */
-        this.uiController = new ResizeUIController(rootParent, this.options);
+        this.uiController = new ResizeUIController(rootParent, this.options, this.quill);
 
         this.bindHandlers();
         this.addEventListeners();
@@ -56,6 +56,8 @@ export default class ImageResize extends Module {
     }
 
     handleClick(evt) {
+        if (!this.quill.isEnabled()) return this.deselect();
+
         if (evt.target instanceof HTMLImageElement) {
             const blot = this.quill.constructor.find(evt.target);
             if (blot) {
@@ -68,6 +70,7 @@ export default class ImageResize extends Module {
 
     handleSelectionChange(range) {
         if (!range) return this.hide();
+        if (!this.quill.isEnabled()) return this.deselect();
 
         const [blot] = range.length === 1
             ? this.quill.scroll.descendant(this.quill.constructor.import('formats/image'), range.index)
@@ -110,7 +113,14 @@ export default class ImageResize extends Module {
         this.uiController?.hide();
     }
 
+    deselect() {
+        this.enableTextSelection();
+        this.hide();
+    }
+
     destroy() {
+        if (!this.quill) return;
+
         this.removeEventListeners();
         this.enableTextSelection();
         this.uiController?.destroy();

@@ -5,12 +5,15 @@ export class DragController {
     overlayManager,
     displaySizeManager,
     tooltipInfoManager,
+    quill,
   ) {
     this.minWidth = minWidth;
     this.minHeight = minHeight;
     this.overlayManager = overlayManager;
     this.displaySizeManager = displaySizeManager;
     this.tooltipInfoManager = tooltipInfoManager;
+    this.quill = quill;
+    this.batching = false;
 
     this.img = null;
     this.dragBox = null;
@@ -37,6 +40,7 @@ export class DragController {
     document.addEventListener("mouseup", this.handleMouseup, true);
     document.addEventListener("touchend", this.handleMouseup, true);
     document.addEventListener("touchcancel", this.handleMouseup, true);
+    window.addEventListener("blur", this.handleMouseup);
   }
 
   removeEventListeners() {
@@ -45,9 +49,28 @@ export class DragController {
     document.removeEventListener("mouseup", this.handleMouseup, true);
     document.removeEventListener("touchend", this.handleMouseup, true);
     document.removeEventListener("touchcancel", this.handleMouseup, true);
+    window.removeEventListener("blur", this.handleMouseup);
+  }
+
+  startBatch() {
+    if (this.batching || !this.quill) return;
+    this.quill.scroll.batchStart();
+    this.batching = true;
+  }
+
+  endBatch() {
+    if (!this.batching) return;
+    this.batching = false;
+    const scroll = this.quill?.scroll;
+    if (!scroll) return;
+
+    scroll.update(scroll.observer.takeRecords());
+    scroll.batchEnd();
   }
 
   startDragging(evt, img, box) {
+    if (this.quill && !this.quill.isEnabled()) return;
+
     evt.preventDefault();
     this.img = img;
     this.dragBox = box;
@@ -65,6 +88,7 @@ export class DragController {
     this.startHeight = img.height || img.naturalHeight;
 
     this.addEventListeners();
+    this.startBatch();
   }
 
   handleDrag(evt) {
@@ -132,16 +156,19 @@ export class DragController {
 
   handleMouseup() {
     this.removeEventListeners();
+    this.endBatch();
     this.img = null;
     this.dragBox = null;
   }
 
   destroy() {
     this.removeEventListeners();
+    this.endBatch();
     this.img = null;
     this.dragBox = null;
     this.overlayManager = null;
     this.displaySizeManager = null;
     this.tooltipInfoManager = null;
+    this.quill = null;
   }
 }

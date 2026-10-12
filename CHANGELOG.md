@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.16] - 12-10-2026
+### Fixed
+- Images can no longer be resized in read-only mode (`readOnly: true` or `quill.disable()`). Before, the resize showed on screen, but Quill didn't record it until the next edit after re-enabling
+- One resize is now one edit: a single undo step, and no full document rebuild on every frame of the drag
+- Calling `destroy()` more than once no longer throws
+
+---
+
 ## [1.0.15] - 12-10-2026
 ### Fixed
 - Moving the cursor no longer makes Quill rebuild its copy of the document on every selection change, which made typing and navigation slow in large documents

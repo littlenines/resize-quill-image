@@ -38,6 +38,8 @@ The three events it listens to:
 - **Quill `selection-change`** — handles keyboard navigation and programmatic selection. If the selection is exactly one image (`range.length === 1`), show the UI; otherwise hide it. A collapsed cursor just before an image doesn't count, even though Quill finds the image at that index.
 - **Quill `text-change`** — if content changes while an image is active (e.g. someone pastes text), we check if that image still exists in the editor. If it was deleted, hide the UI. If it's still there, reposition the overlay in case the layout shifted.
 
+In read-only mode (`readOnly: true` or `quill.disable()`), the click and `selection-change` handlers hide the UI instead of showing it. `DragController` also refuses to start a drag, which covers an image that was already selected when the editor was disabled. Quill has no event for `disable()`.
+
 While an image is selected, the `no-selection` class (`noSelectionClass`) is on `quill.root`; it comes off again when the selection moves away. `enableTextSelection()` / `disableTextSelection()` use `classList.toggle(name, force)` rather than `add()` / `remove()` on purpose. `add()` and `remove()` always rewrite the `class` attribute, even when nothing changes. Quill watches `quill.root` for attribute changes and treats each one as an edit, rebuilding its copy of the whole document. `selection-change` fires on every cursor move, so that made typing and navigation slow in large documents. `toggle()` with a force argument doesn't touch the attribute when the class is already in the right state.
 
 `destroy()` is the cleanup method. It removes all three listeners, removes the `no-selection` class, calls `uiController.destroy()`, and nulls its own references so nothing gets held in memory. You need to call this yourself when unmounting — see the Lifecycle section at the bottom.
@@ -99,7 +101,13 @@ After updating the image dimensions, it calls `reposition()` on the overlay and 
 
 One detail: at the end of each frame, `startX/Y/Width/Height` are updated to the current values. This means deltas are incremental (frame-to-frame), not cumulative from the drag start. This avoids drift and makes the resize feel direct.
 
-`handleMouseup()` removes the global listeners and clears state.
+`handleMouseup()` removes the global listeners and clears state. A window `blur` also ends the drag, in case the mouse release never arrives, for example when you alt-tab mid-drag.
+
+**Batching.** Every width/height change on the `<img>` is a change Quill's observer sees, and Quill treats each one as a separate edit. Left alone, one resize would rebuild Quill's copy of the whole document on every frame and create several undo steps. So `startDragging()` calls `quill.scroll.batchStart()` and the end of the drag calls `batchEnd()`. The image still resizes live, but Quill processes the whole resize as one edit: one rebuild, one `text-change`, one undo step. Two details matter:
+- The batch must always be closed, or Quill stops processing edits. That's why mouse release, touch end/cancel, window blur and `destroy()` all call `endBatch()`.
+- Before `batchEnd()`, `endBatch()` adds any changes the observer hasn't delivered yet (`scroll.observer.takeRecords()`) to the batch. Otherwise `batchEnd()` consumes them without recording an edit, and the screen and Quill's model end up showing different sizes.
+
+**Read-only.** `startDragging()` does nothing when `quill.isEnabled()` is false. Quill ignores user changes made directly to the page while disabled, so a resize would show on screen but never reach Quill's model. It would then be saved silently with the next edit once the editor is re-enabled.
 
 ---
 
@@ -172,12 +180,12 @@ ImageResize.hide() → ResizeUIController.hide()
 `ImageResize.destroy()` handles this. The chain is:
 
 ```
-ImageResize.destroy()
+ImageResize.destroy()   (does nothing if already destroyed)
   → removes click / selection-change / text-change listeners
   → removes the no-selection class from quill.root
   → ResizeUIController.destroy()
       → hide() (removes all DOM elements)
-      → DragController.destroy() (removes document listeners)
+      → DragController.destroy() (removes document listeners, closes any open batch)
       → nulls overlayManager and dragController
   → nulls uiController and quill
 ```
