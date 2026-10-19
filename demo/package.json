@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "quill": "^2.0.3",
-    "react": "^19.3.0",
+    "react": "^19.3.1",
     "react-dom": "^19.3.0",
     "react-router": "^8.4.0",
     "resize-quill-image": "^1.0.16"
